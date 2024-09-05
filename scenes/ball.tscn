@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://scripts/master/ball.gd" type="Script" id=1]
+[ext_resource path="res://assets/sounds/bounce.mp3" type="AudioStream" id=2]
+[ext_resource path="res://assets/textures/ball.png" type="Texture" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 16.0
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 2, 2, 2, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "ball_bounce"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 3, 3, 3, 1 ), Color( 2, 2, 2, 1 ) ]
+}
+
+[node name="ball" type="KinematicBody2D"]
+modulate = Color( 2, 2, 2, 1 )
+position = Vector2( 512, 300 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[node name="shape" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource( 1 )
+
+[node name="wait" type="Timer" parent="."]
+one_shot = true
+
+[node name="bounce" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+
+[node name="animations" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 2 )
+anims/ball_bounce = SubResource( 3 )
+
+[connection signal="timeout" from="wait" to="." method="_on_Wait_timeout"]

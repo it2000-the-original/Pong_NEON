@@ -1,0 +1,222 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://scripts/master/master.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/NEON CLUB MUSIC_bold.otf" type="DynamicFontData" id=2]
+[ext_resource path="res://scenes/player_2.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/pause_menu.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/player_1.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/ball.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/sounds/goal.mp3" type="AudioStream" id=7]
+[ext_resource path="res://assets/textures/background.png" type="Texture" id=10]
+[ext_resource path="res://assets/sounds/music.mp3" type="AudioStream" id=13]
+
+[sub_resource type="DynamicFont" id=7]
+size = 64
+use_filter = true
+extra_spacing_top = 15
+font_data = ExtResource( 2 )
+
+[sub_resource type="Animation" id=19]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("p1_score:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 2, 2, 2, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("p2_score:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 2, 2, 2, 1 ) ]
+}
+
+[sub_resource type="Animation" id=20]
+resource_name = "p1_score_increase"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("p1_score:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 3, 3, 3, 1 ), Color( 2, 2, 2, 1 ) ]
+}
+
+[sub_resource type="Animation" id=21]
+resource_name = "p2_score_increase"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("p2_score:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 3, 3, 3, 1 ), Color( 2, 2, 2, 1 ) ]
+}
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 512, 10 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 512, 10 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 10, 320 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 10, 320 )
+
+[sub_resource type="Environment" id=12]
+background_mode = 4
+dof_blur_far_distance = 1.33
+dof_blur_far_transition = 2.0
+dof_blur_near_enabled = true
+dof_blur_near_distance = 1.1
+dof_blur_near_quality = 0
+glow_enabled = true
+glow_levels/1 = true
+glow_levels/2 = true
+glow_levels/4 = true
+glow_levels/6 = true
+glow_levels/7 = true
+adjustment_enabled = true
+adjustment_saturation = 2.0
+
+[node name="master" type="Node"]
+script = ExtResource( 1 )
+
+[node name="background" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 10 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="p1_score" type="Label" parent="background"]
+modulate = Color( 2, 2, 2, 1 )
+margin_left = 350.0
+margin_top = 30.0
+margin_right = 462.0
+margin_bottom = 109.0
+custom_colors/font_color = Color( 1, 1, 0.921569, 0.803922 )
+custom_fonts/font = SubResource( 7 )
+text = "00"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="p2_score" type="Label" parent="background"]
+modulate = Color( 2, 2, 2, 1 )
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -462.0
+margin_top = 30.0
+margin_right = -350.0
+margin_bottom = 109.0
+custom_colors/font_color = Color( 1, 1, 0.921569, 0.803922 )
+custom_fonts/font = SubResource( 7 )
+text = "00"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="animations" type="AnimationPlayer" parent="background"]
+anims/RESET = SubResource( 19 )
+anims/p1_score_increase = SubResource( 20 )
+anims/p2_score_increase = SubResource( 21 )
+
+[node name="ball" parent="." instance=ExtResource( 6 )]
+
+[node name="player_1" parent="." instance=ExtResource( 5 )]
+
+[node name="player_2" parent="." instance=ExtResource( 3 )]
+
+[node name="walls" type="StaticBody2D" parent="." groups=["wall"]]
+position = Vector2( 512, 300 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="wall_1" type="CollisionShape2D" parent="walls"]
+position = Vector2( 0, -310 )
+shape = SubResource( 2 )
+
+[node name="wall_2" type="CollisionShape2D" parent="walls"]
+position = Vector2( 0, 310 )
+shape = SubResource( 3 )
+
+[node name="door_1" type="Area2D" parent="." groups=["door1"]]
+position = Vector2( -10, 300 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="shape" type="CollisionShape2D" parent="door_1"]
+shape = SubResource( 5 )
+
+[node name="door_2" type="Area2D" parent="." groups=["door2"]]
+position = Vector2( 1034, 300 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="shape" type="CollisionShape2D" parent="door_2"]
+shape = SubResource( 6 )
+
+[node name="pause_menu" parent="." instance=ExtResource( 4 )]
+visible = false
+
+[node name="sounds" type="Node" parent="."]
+
+[node name="goal" type="AudioStreamPlayer2D" parent="sounds"]
+stream = ExtResource( 7 )
+volume_db = 10.0
+
+[node name="music" type="AudioStreamPlayer2D" parent="sounds"]
+position = Vector2( 0, 1 )
+stream = ExtResource( 13 )
+volume_db = 1.0
+autoplay = true
+
+[node name="environment" type="WorldEnvironment" parent="."]
+environment = SubResource( 12 )
+
+[connection signal="show_pause_menu" from="." to="ball" method="_on_master_show_pause_menu"]
+[connection signal="show_pause_menu" from="." to="player_1" method="_on_master_show_pause_menu"]
+[connection signal="show_pause_menu" from="." to="player_2" method="_on_master_show_pause_menu"]
+[connection signal="show_pause_menu" from="." to="pause_menu" method="_on_master_show_pause_menu"]
+[connection signal="body_exited" from="door_1" to="." method="_on_door_1_body_exited"]
+[connection signal="body_exited" from="door_2" to="." method="_on_door_2_body_exited"]
+[connection signal="hidden_pause_menu" from="pause_menu" to="." method="_on_pause_menu_hidden_pause_menu"]
+[connection signal="hidden_pause_menu" from="pause_menu" to="ball" method="_on_pause_menu_hidden_pause_menu"]
+[connection signal="hidden_pause_menu" from="pause_menu" to="player_1" method="_on_pause_menu_hidden_pause_menu"]
+[connection signal="hidden_pause_menu" from="pause_menu" to="player_2" method="_on_pause_menu_hidden_pause_menu"]
